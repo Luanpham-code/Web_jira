@@ -13,4 +13,12 @@ export const projectService = {
   // 👉 Cập nhật project
   updateProject: (id, data) =>
     axiosCustom.put(`/Project/updateProject?projectId=${id}`, data),
+
+  // ❌ Xóa thành viên khỏi project (mới thêm)
+  removeUserFromProject: (data) =>
+    axiosCustom({
+      url: "/Project/removeUserFromProject",
+      method: "DELETE",
+      data, // phải truyền data trong body
+    }),
 };

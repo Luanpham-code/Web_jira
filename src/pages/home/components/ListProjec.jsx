@@ -99,31 +99,20 @@ const ListProjec = () => {
 
 const handleRemoveUser = async (projectId, userId) => {
   try {
-    const userToken = localStorage.getItem("accessToken");
-    const cybersoftToken =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA4NSIsIkhldEhhblN0cmluZyI6IjExLzAyLzIwMjYiLCJIZXRIYW5UaW1lIjoiMTc3MDc2ODAwMDAwMCIsIm5iZiI6MTc0MzAxMjAwMCwiZXhwIjoxNzcwOTE5MjAwfQ._5a1o_PuNL8CuHuGdsi1TABKYJwuMsnG5uSKAILfaY8";
-
-    const body = {
-      projectId,
-      userId,
-    };
-
-    await axios.delete(
-      "https://jiranew.cybersoft.edu.vn/api/Project/removeUserFromProject",
-      {
-        data: body, // DELETE cần truyền qua `data`
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-          TokenCybersoft: cybersoftToken,
-        },
-      }
+    const accessToken = localStorage.getItem("accessToken"); // hoặc lấy từ Redux
+    const res = await projectService.removeUserFromProject(
+      { projectId, userId },
+      accessToken
     );
-
-    message.success("Đã xóa thành viên khỏi dự án");
-    fetchListProjec(); // reload lại danh sách
-  } catch (error) {
-    console.error("Lỗi khi xóa thành viên:", error);
-    message.error("Không thể xóa thành viên");
+    message.success("Đã xóa thành viên khỏi project!");
+    // Gọi lại API list project để cập nhật giao diện
+  } catch (err) {
+    console.error("Lỗi khi xóa thành viên:", err);
+    if (err.response?.status === 401) {
+      message.error("Không có quyền hoặc token hết hạn!");
+    } else {
+      message.error("Xóa thất bại, thử lại sau!");
+    }
   }
 };
 
@@ -189,29 +178,30 @@ const handleRemoveUser = async (projectId, userId) => {
       sorter: (a, b) => a.age - b.age,
       sortOrder: sortedInfo.columnKey === "age" ? sortedInfo.order : null,
     },
+    
 
-     
-       {
+    {
   title: "Members",
   dataIndex: "members",
   key: "members",
   render: (members, record) => {
     const memberList = (
-      <div className="w-64">
+      <div className="w-72 bg-white rounded-2xl shadow-lg p-3 border border-gray-200">
+        <h4 className="font-semibold text-gray-700 mb-2">👥 Thành viên</h4>
         <table className="w-full border-collapse text-sm">
           <thead>
-            <tr className="border-b">
-              <th className="text-left py-1">ID</th>
-              <th className="text-left py-1">Avatar</th>
-              <th className="text-left py-1">Name</th>
+            <tr className="border-b text-gray-600">
+              <th className="text-left py-1 px-2">ID</th>
+              <th className="text-left py-1 px-2">Avatar</th>
+              <th className="text-left py-1 px-2">Name</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {members.map((m) => (
               <tr key={m.userId} className="border-b hover:bg-gray-50">
-                <td className="py-1">{m.userId}</td>
-                <td className="py-1">
+                <td className="py-1 px-2">{m.userId}</td>
+                <td className="py-1 px-2">
                   <Avatar
                     size="small"
                     src={m.avatar}
@@ -220,8 +210,8 @@ const handleRemoveUser = async (projectId, userId) => {
                     {m.name?.charAt(0)?.toUpperCase()}
                   </Avatar>
                 </td>
-                <td className="py-1">{m.name}</td>
-                <td className="py-1">
+                <td className="py-1 px-2">{m.name}</td>
+                <td className="py-1 px-2 text-right">
                   <Button
                     danger
                     shape="circle"
@@ -240,39 +230,32 @@ const handleRemoveUser = async (projectId, userId) => {
     );
 
     return (
-      <div className="inline-block overflow-visible">
-        <Popover
-          content={memberList}
-          title="Members"
-          trigger="hover"
-          placement="right"
-        >
-          <Avatar.Group
-            max={{
-              count: 3,
-              style: { color: "#f56a00", backgroundColor: "#fde3cf" },
-            }}
-          >
-            {members.map((m) => (
-              <Tooltip key={m.userId} title={m.name}>
-                <Avatar
-                  src={m.avatar}
-                  className="border border-gray-300 shadow-sm"
-                >
-                  {m.name
-                    ?.split(" ")
-                    ?.map((w) => w[0])
-                    ?.join("")
-                    ?.toUpperCase()}
-                </Avatar>
-              </Tooltip>
-            ))}
-          </Avatar.Group>
-        </Popover>
-      </div>
+      <Popover content={memberList} title={null} trigger="hover" placement="right">
+        <div className="flex -space-x-2 cursor-pointer">
+          {members.slice(0, 3).map((m) => (
+            <div
+              key={m.userId}
+              className="w-8 h-8 rounded-full bg-gray-200 border border-white text-xs flex items-center justify-center font-semibold text-gray-700"
+            >
+              {m.name
+                ?.split(" ")
+                ?.map((w) => w[0])
+                ?.join("")
+                ?.toUpperCase()}
+            </div>
+          ))}
+          {members.length > 3 && (
+            <div className="w-8 h-8 rounded-full border border-gray-300 text-sm flex items-center justify-center bg-white">
+              +{members.length - 3}
+            </div>
+          )}
+        </div>
+      </Popover>
     );
   },
 },
+     
+     
     {
       title: "Action",
       key: "action",
