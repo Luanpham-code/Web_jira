@@ -1,1 +1,7 @@
 @import "tailwindcss";
+.ant-table-cell {
+  overflow: visible !important;
+}
+.ant-popover {
+  z-index: 9999 !important;
+}

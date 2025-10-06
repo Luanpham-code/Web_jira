@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setListProjecAction } from "../../../stores/Project";
 import { projectService } from "../../../service/projectService";
-import {Table,Space,Button,Avatar,Tooltip,Popconfirm,message,} from "antd";
+import { Table, Space, Button, Avatar, Tooltip, Popconfirm, message, Popover } from "antd";
 import axios from "axios";
+import EditProjectModal from "./EditProjectModal";
 
 const ListProjec = () => {
   const dispatch = useDispatch();
   const listProjec = useSelector((state) => state.projectSlice.listProjec);
+  const [editingProjectId, setEditingProjectId] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+ 
 
   // state quản lý filter, sorter & pagination
   const [filteredInfo, setFilteredInfo] = useState({});
@@ -18,6 +22,14 @@ const ListProjec = () => {
     showSizeChanger: true,
     pageSizeOptions: ["5", "10", "20", "50", "100"],
   });
+  const openEditModal = (id) => {
+    setEditingProjectId(id);
+    setIsEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+  };
 
   // gọi API
   const fetchListProjec = async () => {
@@ -50,14 +62,71 @@ const ListProjec = () => {
 
   const handleDelete = async (id) => {
   try {
-    await axios.delete(`https://685165ba8612b47a2c09e3e5.mockapi.io/projects/${id}`);
-    alert("Xóa thành công!");
-    // Cập nhật lại danh sách sau khi xóa
+    // Kiểm tra token trước khi gọi API
+    const userToken = localStorage.getItem("accessToken"); // Token đăng nhập lưu khi login
+    const cybersoftToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA4NSIsIkhldEhhblN0cmluZyI6IjExLzAyLzIwMjYiLCJIZXRIYW5UaW1lIjoiMTc3MDc2ODAwMDAwMCIsIm5iZiI6MTc0MzAxMjAwMCwiZXhwIjoxNzcwOTE5MjAwfQ._5a1o_PuNL8CuHuGdsi1TABKYJwuMsnG5uSKAILfaY8"; // TokenCybersoft (copy đúng bản của bạn)
+
+    if (!userToken) {
+      console.error("Không có token đăng nhập, vui lòng đăng nhập lại!");
+      return;
+    }
+
+    console.log("Gửi yêu cầu xoá project ID:", id);
+
+    const response = await axios.delete(
+      `https://jiranew.cybersoft.edu.vn/api/Project/deleteProject?projectId=${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+          TokenCybersoft: cybersoftToken,
+        },
+      }
+    );
+
+    console.log("Xóa thành công:", response.data);
+
+    // Nếu bạn có danh sách project đang load lại từ API thì gọi lại ở đây
+    // ví dụ:
+    // dispatch(setListProjecAction());
+
   } catch (error) {
     console.error("Lỗi khi xóa:", error);
-    alert("Xóa thất bại!");
+    if (error.response) {
+      console.log("Chi tiết lỗi:", error.response.status, error.response.data);
+    }
   }
-  };
+};
+
+const handleRemoveUser = async (projectId, userId) => {
+  try {
+    const userToken = localStorage.getItem("accessToken");
+    const cybersoftToken =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA4NSIsIkhldEhhblN0cmluZyI6IjExLzAyLzIwMjYiLCJIZXRIYW5UaW1lIjoiMTc3MDc2ODAwMDAwMCIsIm5iZiI6MTc0MzAxMjAwMCwiZXhwIjoxNzcwOTE5MjAwfQ._5a1o_PuNL8CuHuGdsi1TABKYJwuMsnG5uSKAILfaY8";
+
+    const body = {
+      projectId,
+      userId,
+    };
+
+    await axios.delete(
+      "https://jiranew.cybersoft.edu.vn/api/Project/removeUserFromProject",
+      {
+        data: body, // DELETE cần truyền qua `data`
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+          TokenCybersoft: cybersoftToken,
+        },
+      }
+    );
+
+    message.success("Đã xóa thành viên khỏi dự án");
+    fetchListProjec(); // reload lại danh sách
+  } catch (error) {
+    console.error("Lỗi khi xóa thành viên:", error);
+    message.error("Không thể xóa thành viên");
+  }
+};
+
 
   useEffect(() => {
     fetchListProjec();
@@ -121,46 +190,104 @@ const ListProjec = () => {
       sortOrder: sortedInfo.columnKey === "age" ? sortedInfo.order : null,
     },
 
-    {
-      title: "Members",
-      dataIndex: "members",
-      key: "members",
-      render: (members) => (
-        <Avatar.Group
-          max={{
-            count: 3,
-            style: { color: "#f56a00", backgroundColor: "#fde3cf" },
-          }}
+     
+       {
+  title: "Members",
+  dataIndex: "members",
+  key: "members",
+  render: (members, record) => {
+    const memberList = (
+      <div className="w-64">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="border-b">
+              <th className="text-left py-1">ID</th>
+              <th className="text-left py-1">Avatar</th>
+              <th className="text-left py-1">Name</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {members.map((m) => (
+              <tr key={m.userId} className="border-b hover:bg-gray-50">
+                <td className="py-1">{m.userId}</td>
+                <td className="py-1">
+                  <Avatar
+                    size="small"
+                    src={m.avatar}
+                    className="border border-gray-300"
+                  >
+                    {m.name?.charAt(0)?.toUpperCase()}
+                  </Avatar>
+                </td>
+                <td className="py-1">{m.name}</td>
+                <td className="py-1">
+                  <Button
+                    danger
+                    shape="circle"
+                    size="small"
+                    className="!bg-red-500 hover:!bg-red-600 !border-none !text-white"
+                    onClick={() => handleRemoveUser(record.id, m.userId)}
+                  >
+                    ✕
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+
+    return (
+      <div className="inline-block overflow-visible">
+        <Popover
+          content={memberList}
+          title="Members"
+          trigger="hover"
+          placement="right"
         >
-          {members.map((m) => (
-            <Tooltip key={m.userId} title={m.name}>
-              <Avatar style={{ backgroundColor: "#87d068" }}>
-                {m.name
-                  .split(" ")
-                  .map((w) => w[0])
-                  .join("")
-                  .toUpperCase()}
-              </Avatar>
-            </Tooltip>
-          ))}
-        </Avatar.Group>
-      ),
-    },
+          <Avatar.Group
+            max={{
+              count: 3,
+              style: { color: "#f56a00", backgroundColor: "#fde3cf" },
+            }}
+          >
+            {members.map((m) => (
+              <Tooltip key={m.userId} title={m.name}>
+                <Avatar
+                  src={m.avatar}
+                  className="border border-gray-300 shadow-sm"
+                >
+                  {m.name
+                    ?.split(" ")
+                    ?.map((w) => w[0])
+                    ?.join("")
+                    ?.toUpperCase()}
+                </Avatar>
+              </Tooltip>
+            ))}
+          </Avatar.Group>
+        </Popover>
+      </div>
+    );
+  },
+},
     {
       title: "Action",
       key: "action",
       render: (_, record) => (
         <Space>
-          <Button type="primary">Edit</Button>
+          <Button type="primary" onClick={() => openEditModal(record.id)}>
+            Edit
+          </Button>
           <Popconfirm
             title="Bạn có chắc muốn xóa?"
             onConfirm={() => handleDelete(record.id)}
             okText="Xóa"
-            cancelText="hủy"
+            cancelText="Hủy"
           >
-            <Button danger onClick={() => handleDelete(project.id)}>
-             Delete
-            </Button>
+            <Button danger>Delete</Button>
           </Popconfirm>
         </Space>
       ),
@@ -169,6 +296,7 @@ const ListProjec = () => {
 
   return (
     <>
+    <div className="p-6 bg-white rounded-2xl shadow-md">
       <Space style={{ marginBottom: 16 }}>
         <Button onClick={setAgeSort}>Sort age</Button>
         <Button onClick={clearFilters}>Clear filters</Button>
@@ -181,6 +309,13 @@ const ListProjec = () => {
         onChange={handleChange}
         pagination={pagination} // ✅ dùng pagination state
       />
+      <EditProjectModal
+        visible={isEditModalOpen}
+        projectId={editingProjectId}
+        onCancel={closeEditModal}
+        onSuccess={fetchListProjec} // reload lại danh sách
+      />
+      </div>
     </>
   );
 };
