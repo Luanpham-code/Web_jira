@@ -1,24 +1,23 @@
-
-
+// src/service/projectService.js
 import { axiosCustom } from "./config";
 
 export const projectService = {
   getListProject: () => axiosCustom.get("/Project/getAllProject"),
 
-  deleteProject: (id) => axiosCustom.delete(`/Project/deleteProject?projectId=${id}`),
+  deleteProject: (id) =>
+    axiosCustom.delete(`/Project/deleteProject?projectId=${id}`),
 
-  // 👉 Lấy chi tiết project theo ID
-  getProjectDetail: (id) => axiosCustom.get(`/Project/getProjectDetail?id=${id}`),
+  getProjectDetail: (id) =>
+    axiosCustom.get(`/Project/getProjectDetail?id=${id}`),
 
-  // 👉 Cập nhật project
   updateProject: (id, data) =>
     axiosCustom.put(`/Project/updateProject?projectId=${id}`, data),
+  
+  addUserToProject: (data) => axiosCustom.post(`/Project/assignUserProject`, data),
 
-  // ❌ Xóa thành viên khỏi project (mới thêm)
-  removeUserFromProject: (data) =>
-    axiosCustom({
-      url: "/Project/removeUserFromProject",
-      method: "DELETE",
-      data, // phải truyền data trong body
+   // Xóa thành viên ✅ (đúng theo Swagger bạn gửi)
+  removeUserFromProject: (projectId, userId) =>
+    axiosCustom.delete(`/Project/removeUserFromProject`, {
+      data: { projectId, userId },
     }),
 };

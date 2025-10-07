@@ -11,6 +11,7 @@ const EditProjectModal = ({ visible, onCancel, projectId, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState("");
 
+  // 🔹 Load thông tin project khi mở modal
   useEffect(() => {
     if (visible && projectId) {
       loadProjectDetail();
@@ -28,8 +29,14 @@ const EditProjectModal = ({ visible, onCancel, projectId, onSuccess }) => {
       });
       setDescription(project.description || "");
     } catch (err) {
-      console.error(err);
-      message.error("Không thể tải thông tin project!");
+      console.error("❌ Lỗi getProjectDetail:", err);
+      if (err.response?.status === 401) {
+        message.error("Token không hợp lệ hoặc đã hết hạn!");
+      } else if (err.response?.status === 404) {
+        message.error("Không tìm thấy project!");
+      } else {
+        message.error("Không thể tải thông tin project!");
+      }
     }
   };
 
@@ -43,10 +50,10 @@ const EditProjectModal = ({ visible, onCancel, projectId, onSuccess }) => {
       setLoading(true);
       await projectService.updateProject(projectId, dataSubmit);
       message.success("Cập nhật thành công!");
-      onSuccess(); // reload list
+      onSuccess?.(); // reload list
       onCancel(); // đóng modal
     } catch (err) {
-      console.error(err);
+      console.error("❌ Lỗi updateProject:", err);
       message.error("Cập nhật thất bại!");
     } finally {
       setLoading(false);
@@ -56,25 +63,25 @@ const EditProjectModal = ({ visible, onCancel, projectId, onSuccess }) => {
   return (
     <Modal
       open={visible}
-      title={<h2 className="font-semibold mb-2">Edit Project</h2>}
+      title={<h2 className="text-xl font-semibold text-center">✏️ Edit Project</h2>}
       onCancel={onCancel}
       onOk={handleSubmit}
-      okText="Submit"
-      cancelText="Cancel"
+      okText="Lưu thay đổi"
+      cancelText="Hủy"
       confirmLoading={loading}
       width={800}
+      className="rounded-xl"
     >
       <Form form={form} layout="vertical">
-        {/* 3 input ngang hàng */}
         <Row gutter={16}>
           <Col span={8}>
-            <Form.Item label="Project id" name="id">
-              <Input disabled />
+            <Form.Item label="Project ID" name="id">
+              <Input disabled className="bg-gray-100" />
             </Form.Item>
           </Col>
           <Col span={8}>
             <Form.Item
-              label="Project name"
+              label="Tên dự án"
               name="projectName"
               rules={[{ required: true, message: "Vui lòng nhập tên dự án" }]}
             >
@@ -83,7 +90,7 @@ const EditProjectModal = ({ visible, onCancel, projectId, onSuccess }) => {
           </Col>
           <Col span={8}>
             <Form.Item
-              label="Project Category"
+              label="Loại dự án"
               name="categoryId"
               rules={[{ required: true, message: "Vui lòng chọn loại dự án" }]}
             >
@@ -96,8 +103,7 @@ const EditProjectModal = ({ visible, onCancel, projectId, onSuccess }) => {
           </Col>
         </Row>
 
-        {/* TinyMCE editor */}
-        <Form.Item label="Description">
+        <Form.Item label="Mô tả chi tiết">
           <Editor
             apiKey="v561vo0qd1fz3juphckx6kd8ba7njqvi8rcv4n8klx87h4kn"
             value={description}
