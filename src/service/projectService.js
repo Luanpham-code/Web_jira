@@ -24,4 +24,10 @@ export const projectService = {
   getUserByKeyword: (keyword) =>
   axiosCustom.get(`/Users/getUser?keyword=${keyword}`),
 
+   getAllStatus: () => axiosCustom.get("/Status/getAll"),
+  getAllPriority: () => axiosCustom.get("/Priority/getAll?id=0"),
+  getAllTaskType: () => axiosCustom.get("/TaskType/getAll"),
+  getAllUsers: () => axiosCustom.get("/Users/getUser"),
+  createTask: (data) => axiosCustom.post("/Project/createTask", data),
+
 };
