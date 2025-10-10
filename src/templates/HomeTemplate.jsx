@@ -20,7 +20,7 @@ const HomeTemplate = () => {
       {/* Sidebar xanh bên trái */}
       <div className="w-16 bg-[#0747a6] flex flex-col items-center py-4 space-y-6">
         <Link
-          to="/createproject"
+          to="/createtask"
           className="text-white text-sm text-center hover:bg-blue-700 px-2 py-2 rounded w-full"
         >
           + Create task

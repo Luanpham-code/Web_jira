@@ -7,6 +7,8 @@ import LoginPage from "../pages/login";
 import RegisterPage from "../pages/register";
 import WebDetailPage from "../pages/Web-detail";
 import PrivateRoute from "./PrivateRoute";
+import CreateTaskPage from "../pages/createTask";
+import CreateProject from "../pages/CreateProject";
 
 const routers = [
   // Public routes
@@ -31,6 +33,8 @@ const routers = [
         child: [
           { path: "projectmanagement", element: <HomePage /> },       // ✅ /home
           { path: "detail", element: <WebDetailPage /> }, // ✅ /detail
+          { path: "createtask", element: <CreateTaskPage /> }, // ✅ /createtask
+          { path: "createproject", element: <CreateProject /> }, // ✅ /createtask
         ],
       },
     ],

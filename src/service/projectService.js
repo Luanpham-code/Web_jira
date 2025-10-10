@@ -20,4 +20,8 @@ export const projectService = {
     axiosCustom.delete(`/Project/removeUserFromProject`, {
       data: { projectId, userId },
     }),
+
+  getUserByKeyword: (keyword) =>
+  axiosCustom.get(`/Users/getUser?keyword=${keyword}`),
+
 };
