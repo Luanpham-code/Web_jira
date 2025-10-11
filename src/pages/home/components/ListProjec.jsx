@@ -11,6 +11,7 @@ import {
 } from "antd";
 import EditProjectModal from "./EditProjectModal";
 import MemberCell from "./MemberCell"; // ✅ import component mới
+import { useNavigate } from "react-router-dom";
 
 const ListProjec = () => {
   const dispatch = useDispatch();
@@ -109,6 +110,7 @@ const ListProjec = () => {
     setSortedInfo({ order: "descend", columnKey: "age" });
 
   // ✅ Cấu hình các cột của bảng
+  const navigate = useNavigate();
   const columns = [
     {
       title: "ID",
@@ -121,10 +123,13 @@ const ListProjec = () => {
       title: "Project Name",
       dataIndex: "projectName",
       key: "projectName",
-      render: (text) => (
-        <span className="font-medium text-gray-800 hover:text-indigo-600 cursor-pointer">
-          {text}
-        </span>
+      render: (text, record) => (
+        <a
+      onClick={() => navigate(`/projectdetail/${record.id}`)}
+      className="font-medium text-gray-800 hover:text-indigo-600 cursor-pointer"
+    >
+      {text}
+    </a>
       ),
     },
     { title: "Category", dataIndex: "categoryName", key: "categoryName" },

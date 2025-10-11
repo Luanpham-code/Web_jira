@@ -9,6 +9,7 @@ import WebDetailPage from "../pages/Web-detail";
 import PrivateRoute from "./PrivateRoute";
 import CreateTaskPage from "../pages/createTask";
 import CreateProject from "../pages/CreateProject";
+import ProjectDetail from "../pages/ProjectDetail";
 
 const routers = [
   // Public routes
@@ -35,6 +36,7 @@ const routers = [
           { path: "detail", element: <WebDetailPage /> }, // ✅ /detail
           { path: "createtask", element: <CreateTaskPage /> }, // ✅ /createtask
           { path: "createproject", element: <CreateProject /> }, // ✅ /createtask
+          { path:"/projectdetail/:projectId", element:<ProjectDetail />},
         ],
       },
     ],

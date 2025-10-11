@@ -6,6 +6,7 @@
 // };
 
 import axios from "axios";
+import { axiosCustom } from "./config";
 
 export const authService = {
   login: (data) => {
@@ -19,4 +20,5 @@ export const authService = {
       }
     );
   },
+  signup: (data) => axiosCustom.post("/Users/signup", data),
 };

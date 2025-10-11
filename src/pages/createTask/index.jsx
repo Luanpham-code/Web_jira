@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Form, Input, Select, Button, InputNumber, message } from "antd";
 import { projectService } from "../../service/projectService";
+import { Slider } from "antd";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const { Option } = Select;
 
@@ -25,9 +28,8 @@ const CreateTaskPage = () => {
             projectService.getAllUsers(),
           ]);
 
-        // ✅ Lọc trùng userId để tránh cảnh báo duplicate key
         const uniqueUsers = (userRes.data.content || []).filter(
-          (v, i, a) => a.findIndex(t => t.userId === v.userId) === i
+          (v, i, a) => a.findIndex((t) => t.userId === v.userId) === i
         );
 
         setProjects(projectRes.data.content || []);
@@ -73,17 +75,21 @@ const CreateTaskPage = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow-lg">
-      <h2 className="text-xl font-bold mb-4">Create Task</h2>
+    <div className="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+      <h2 className="text-xl font-bold mb-6">Create Task</h2>
 
       <Form layout="vertical" form={form} onFinish={handleSubmit}>
-        {/* Project */}
+        {/* (1) Project */}
         <Form.Item
           label="Project"
           name="projectId"
           rules={[{ required: true, message: "Vui lòng chọn project" }]}
         >
-          <Select showSearch placeholder="Select project" optionFilterProp="children">
+          <Select
+            showSearch
+            placeholder="Select project"
+            optionFilterProp="children"
+          >
             {projects.map((p) => (
               <Option key={p.id} value={p.id}>
                 {p.projectName}
@@ -101,20 +107,28 @@ const CreateTaskPage = () => {
           <Input placeholder="Enter task name" />
         </Form.Item>
 
-        <div className="grid grid-cols-2 gap-4">
-          {/* Status */}
-          <Form.Item label="Status" name="statusId" rules={[{ required: true }]}>
-            <Select placeholder="Select status">
-              {statusList.map((s) => (
-                <Option key={s.statusId} value={s.statusId}>
-                  {s.statusName}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+        {/* (2) Status */}
+        <Form.Item
+          label="Status"
+          name="statusId"
+          rules={[{ required: true }]}
+        >
+          <Select placeholder="Select status">
+            {statusList.map((s) => (
+              <Option key={s.statusId} value={s.statusId}>
+                {s.statusName}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
 
-          {/* Priority */}
-          <Form.Item label="Priority" name="priorityId" rules={[{ required: true }]}>
+        {/* (3) Priority + (4) Task type */}
+        <div className="grid grid-cols-2 gap-4">
+          <Form.Item
+            label="Priority"
+            name="priorityId"
+            rules={[{ required: true }]}
+          >
             <Select placeholder="Select priority">
               {priorityList.map((p) => (
                 <Option key={p.priorityId} value={p.priorityId}>
@@ -124,8 +138,11 @@ const CreateTaskPage = () => {
             </Select>
           </Form.Item>
 
-          {/* Task type */}
-          <Form.Item label="Task type" name="typeId" rules={[{ required: true }]}>
+          <Form.Item
+            label="Task type"
+            name="typeId"
+            rules={[{ required: true }]}
+          >
             <Select placeholder="Select task type">
               {taskTypes.map((t) => (
                 <Option key={t.id} value={t.id}>
@@ -134,20 +151,57 @@ const CreateTaskPage = () => {
               ))}
             </Select>
           </Form.Item>
-
-          {/* Assignees */}
-          <Form.Item label="Assignees" name="listUserAsign" rules={[{ required: true }]}>
-            <Select mode="multiple" showSearch placeholder="Select users" optionFilterProp="children">
-              {users.map((u) => (
-                <Option key={u.userId} value={u.userId}>
-                  {u.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
         </div>
 
-        {/* Estimate & Time tracking */}
+        {/* (5) Assignees + Time tracking */}
+        <div className="grid grid-cols-2 gap-4">
+          <Form.Item
+           label="Assignees"
+           name="listUserAsign"
+           rules={[{ required: true }]}
+          >
+          <Select
+          mode="multiple"
+          showSearch
+          placeholder="Select users"
+          optionFilterProp="children"
+          >
+          {users.map((u) => (
+          <Option key={u.userId} value={u.userId}>
+          {u.name}
+          </Option>
+          ))}
+          </Select>
+        </Form.Item>
+
+        {/* Time tracking */}
+     <div>
+    <label className="font-medium block mb-2">Time tracking</label>
+
+    {/* Thanh slider hiển thị tiến độ */}
+    <Slider
+       min={0}
+       max={
+        (form.getFieldValue("timeTrackingSpent") || 0) +
+        (form.getFieldValue("timeTrackingRemaining") || 0)
+       }
+      value={form.getFieldValue("timeTrackingSpent") || 0}
+      tooltip={{ open: false }}
+      />
+
+      <div className="flex justify-between text-gray-500 text-sm">
+       <span>
+         {(form.getFieldValue("timeTrackingSpent") || 0) + "h logged"}
+       </span>
+       <span>
+        {(form.getFieldValue("timeTrackingRemaining") || 0) +
+          "h remaining"}
+       </span>
+       </div>
+      </div>
+    </div>
+
+        {/* Original Estimate + Time */}
         <div className="grid grid-cols-3 gap-4">
           <Form.Item label="Original Estimate" name="originalEstimate">
             <InputNumber min={0} className="w-full" />
@@ -162,14 +216,26 @@ const CreateTaskPage = () => {
 
         {/* Description */}
         <Form.Item label="Description" name="description">
-          <Input.TextArea rows={4} placeholder="Enter task description..." />
+         <ReactQuill
+           theme="snow"
+           placeholder="Enter task description..."
+           style={{ height: 200 }}
+         />
         </Form.Item>
 
-        {/* Submit */}
-        <Form.Item>
-          <Button type="primary" htmlType="submit" loading={loading} className="bg-blue-600">
+        {/* (6) Submit */}
+        <Form.Item style={{ marginTop: 24 }}>
+        <div className="flex justify-end space-x-2 ">
+          <Button>Cancel</Button>
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={loading}
+            className="bg-blue-600"
+          >
             Submit
           </Button>
+        </div>
         </Form.Item>
       </Form>
     </div>
