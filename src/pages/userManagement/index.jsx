@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const TOKEN_CYBERSOFT =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."; // ✅ Thay token thật
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."; // 🔹 thay token thật
 const API_URL = "https://jiranew.cybersoft.edu.vn/api";
 
 const UserManagement = () => {
@@ -15,6 +15,10 @@ const UserManagement = () => {
     passWord: "",
   });
   const [editing, setEditing] = useState(null);
+
+  // ✅ Phân trang
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   const token = localStorage.getItem("accessToken");
 
@@ -37,7 +41,7 @@ const UserManagement = () => {
     fetchUsers();
   }, []);
 
-  // ===== HANDLE CREATE OR UPDATE =====
+  // ===== HANDLE CREATE / UPDATE =====
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -79,83 +83,164 @@ const UserManagement = () => {
     }
   };
 
+  // ===== FILTER + PAGINATION =====
   const filteredUsers = users.filter(
     (u) =>
       u.name.toLowerCase().includes(search.toLowerCase()) ||
       u.email.toLowerCase().includes(search.toLowerCase())
   );
 
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">User Management</h1>
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentUsers = filteredUsers.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
-      {/* Search + Create button */}
-      <div className="flex justify-between items-center mb-4">
+  // ===== CHUYỂN TRANG =====
+  const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  return (
+    <div className="p-8">
+      {/* Tiêu đề */}
+      <h1 className="text-blue-600 text-xl font-semibold mb-4 underline cursor-pointer">
+        Create user
+      </h1>
+
+      {/* Ô search */}
+      <div className="flex items-center gap-2 mb-6">
         <input
           type="text"
-          placeholder="Search user..."
+          placeholder="search ..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border rounded-md px-3 py-1 text-sm w-1/3"
-        />
-        <button
-          onClick={() => {
-            setEditing(null);
-            setForm({ email: "", name: "", phoneNumber: "", passWord: "" });
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setCurrentPage(1); // Reset về trang đầu khi tìm kiếm
           }}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          + Create User
+          className="border border-gray-400 px-3 py-2 rounded w-full max-w-3xl"
+        />
+        <button className="border border-gray-400 bg-white px-4 py-2 rounded hover:bg-gray-100">
+          Search
         </button>
       </div>
 
-      {/* Table */}
-      <table className="w-full text-sm border border-gray-300">
-        <thead className="bg-gray-100 text-gray-700">
-          <tr>
-            <th className="border p-2">#</th>
-            <th className="border p-2">Email</th>
-            <th className="border p-2">Name</th>
-            <th className="border p-2">Phone</th>
-            <th className="border p-2 text-center">Actions</th>
+      {/* Bảng danh sách */}
+      <table className="w-full border border-gray-400 text-sm">
+        <thead>
+          <tr className="bg-gray-100 text-left">
+            <th className="border border-gray-300 p-2 w-12 text-center">STT</th>
+            <th className="border border-gray-300 p-2">Email</th>
+            <th className="border border-gray-300 p-2">Name</th>
+            <th className="border border-gray-300 p-2">Phone</th>
+            <th className="border border-gray-300 p-2 text-center">Action</th>
           </tr>
         </thead>
         <tbody>
-          {filteredUsers.map((u, i) => (
-            <tr key={u.userId} className="hover:bg-gray-50">
-              <td className="border p-2 text-center">{i + 1}</td>
-              <td className="border p-2">{u.email}</td>
-              <td className="border p-2">{u.name}</td>
-              <td className="border p-2">{u.phoneNumber}</td>
-              <td className="border p-2 text-center space-x-2">
-                <button
-                  onClick={() => {
-                    setEditing(u);
-                    setForm({
-                      email: u.email,
-                      name: u.name,
-                      phoneNumber: u.phoneNumber,
-                      passWord: "",
-                    });
-                  }}
-                  className="bg-yellow-400 text-white px-3 py-1 rounded"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(u.userId)}
-                  className="bg-red-500 text-white px-3 py-1 rounded"
-                >
-                  Delete
-                </button>
+          {currentUsers.length > 0 ? (
+            currentUsers.map((u, i) => (
+              <tr key={u.userId} className="hover:bg-gray-50">
+                <td className="border border-gray-300 p-2 text-center">
+                  {startIndex + i + 1}
+                </td>
+                <td className="border border-gray-300 p-2">{u.email}</td>
+                <td className="border border-gray-300 p-2">{u.name}</td>
+                <td className="border border-gray-300 p-2">{u.phoneNumber}</td>
+                <td className="border border-gray-300 p-2 text-center space-x-2">
+                  <button
+                    onClick={() => {
+                      setEditing(u);
+                      setForm({
+                        email: u.email,
+                        name: u.name,
+                        phoneNumber: u.phoneNumber,
+                        passWord: "",
+                      });
+                    }}
+                    className="border border-gray-400 px-3 py-1 rounded hover:bg-yellow-100"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(u.userId)}
+                    className="border border-gray-400 px-3 py-1 rounded hover:bg-red-100"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td
+                colSpan="5"
+                className="text-center p-4 text-gray-500 border border-gray-300"
+              >
+                Không có dữ liệu
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
 
+      {/* 🔹 PHÂN TRANG THẬT */}
+      {totalPages > 1 && (
+  <div className="flex justify-end items-center gap-2 mt-4 text-sm text-gray-700">
+    <button
+      onClick={() => goToPage(currentPage - 1)}
+      disabled={currentPage === 1}
+      className="hover:underline disabled:text-gray-400"
+    >
+      ← prev
+    </button>
+
+    {(() => {
+      const pageButtons = [];
+      const maxButtons = 10;
+      let startPage = Math.max(
+        1,
+        currentPage - Math.floor(maxButtons / 2)
+      );
+      let endPage = startPage + maxButtons - 1;
+
+      if (endPage > totalPages) {
+        endPage = totalPages;
+        startPage = Math.max(1, endPage - maxButtons + 1);
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        pageButtons.push(
+          <button
+            key={i}
+            onClick={() => goToPage(i)}
+            className={`px-2 py-1 rounded ${
+              currentPage === i
+                ? "border border-gray-400 font-semibold"
+                : "hover:underline"
+            }`}
+          >
+            {i}
+          </button>
+        );
+      }
+      return pageButtons;
+    })()}
+
+    <button
+      onClick={() => goToPage(currentPage + 1)}
+      disabled={currentPage === totalPages}
+      className="hover:underline disabled:text-gray-400"
+    >
+      next →
+    </button>
+  </div>
+)}
+
       {/* Form thêm/sửa user */}
-      <div className="mt-6 bg-gray-50 border rounded-lg p-4 max-w-md">
+      <div className="mt-10 border border-gray-400 p-4 rounded w-full max-w-lg">
         <h3 className="font-semibold mb-3">
           {editing ? "Edit User" : "Create New User"}
         </h3>
@@ -165,7 +250,7 @@ const UserManagement = () => {
             placeholder="Email"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
-            className="border w-full px-3 py-2 rounded"
+            className="border border-gray-400 w-full px-3 py-2 rounded"
             required
           />
           <input
@@ -173,17 +258,15 @@ const UserManagement = () => {
             placeholder="Name"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
-            className="border w-full px-3 py-2 rounded"
+            className="border border-gray-400 w-full px-3 py-2 rounded"
             required
           />
           <input
             type="text"
             placeholder="Phone number"
             value={form.phoneNumber}
-            onChange={(e) =>
-              setForm({ ...form, phoneNumber: e.target.value })
-            }
-            className="border w-full px-3 py-2 rounded"
+            onChange={(e) => setForm({ ...form, phoneNumber: e.target.value })}
+            className="border border-gray-400 w-full px-3 py-2 rounded"
             required
           />
           {!editing && (
@@ -192,13 +275,13 @@ const UserManagement = () => {
               placeholder="Password"
               value={form.passWord}
               onChange={(e) => setForm({ ...form, passWord: e.target.value })}
-              className="border w-full px-3 py-2 rounded"
+              className="border border-gray-400 w-full px-3 py-2 rounded"
               required
             />
           )}
           <button
             type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            className="border border-gray-400 bg-white px-4 py-2 rounded hover:bg-gray-100"
           >
             {editing ? "Update" : "Create"}
           </button>
