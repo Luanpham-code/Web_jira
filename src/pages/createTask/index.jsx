@@ -38,7 +38,7 @@ const CreateTaskPage = () => {
         setTaskTypes(typeRes.data.content || []);
         setUsers(uniqueUsers);
       } catch (error) {
-        console.error("❌ Lỗi khi gọi API:", error);
+        console.error(" Lỗi khi gọi API:", error);
         message.error("Không thể tải dữ liệu.");
       }
     };
@@ -107,7 +107,7 @@ const CreateTaskPage = () => {
           <Input placeholder="Enter task name" />
         </Form.Item>
 
-        {/* (2) Status */}
+        {/* Status */}
         <Form.Item
           label="Status"
           name="statusId"
@@ -122,7 +122,7 @@ const CreateTaskPage = () => {
           </Select>
         </Form.Item>
 
-        {/* (3) Priority + (4) Task type */}
+      
         <div className="grid grid-cols-2 gap-4">
           <Form.Item
             label="Priority"
@@ -153,7 +153,7 @@ const CreateTaskPage = () => {
           </Form.Item>
         </div>
 
-        {/* (5) Assignees + Time tracking */}
+        
         <div className="grid grid-cols-2 gap-4">
           <Form.Item
            label="Assignees"
@@ -174,11 +174,11 @@ const CreateTaskPage = () => {
           </Select>
         </Form.Item>
 
-        {/* Time tracking */}
+        
      <div>
     <label className="font-medium block mb-2">Time tracking</label>
 
-    {/* Thanh slider hiển thị tiến độ */}
+    
     <Slider
        min={0}
        max={
@@ -201,7 +201,7 @@ const CreateTaskPage = () => {
       </div>
     </div>
 
-        {/* Original Estimate + Time */}
+        
         <div className="grid grid-cols-3 gap-4">
           <Form.Item label="Original Estimate" name="originalEstimate">
             <InputNumber min={0} className="w-full" />
@@ -223,7 +223,7 @@ const CreateTaskPage = () => {
          />
         </Form.Item>
 
-        {/* (6) Submit */}
+        {/* Submit */}
         <Form.Item style={{ marginTop: 24 }}>
         <div className="flex justify-end space-x-2 ">
           <Button>Cancel</Button>

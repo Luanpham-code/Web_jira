@@ -29,7 +29,7 @@ const EditProjectModal = ({ visible, onCancel, projectId, onSuccess }) => {
       });
       setDescription(project.description || "");
     } catch (err) {
-      console.error("❌ Lỗi getProjectDetail:", err);
+      console.error(" Lỗi getProjectDetail:", err);
       if (err.response?.status === 401) {
         message.error("Token không hợp lệ hoặc đã hết hạn!");
       } else if (err.response?.status === 404) {
@@ -50,10 +50,10 @@ const EditProjectModal = ({ visible, onCancel, projectId, onSuccess }) => {
       setLoading(true);
       await projectService.updateProject(projectId, dataSubmit);
       message.success("Cập nhật thành công!");
-      onSuccess?.(); // reload list
-      onCancel(); // đóng modal
+      onSuccess?.(); 
+      onCancel(); 
     } catch (err) {
-      console.error("❌ Lỗi updateProject:", err);
+      console.error(" Lỗi updateProject:", err);
       message.error("Cập nhật thất bại!");
     } finally {
       setLoading(false);
@@ -63,7 +63,7 @@ const EditProjectModal = ({ visible, onCancel, projectId, onSuccess }) => {
   return (
     <Modal
       open={visible}
-      title={<h2 className="text-xl font-semibold text-center">✏️ Edit Project</h2>}
+      title={<h2 className="text-xl font-semibold text-center"> Edit Project</h2>}
       onCancel={onCancel}
       onOk={handleSubmit}
       okText="Lưu thay đổi"

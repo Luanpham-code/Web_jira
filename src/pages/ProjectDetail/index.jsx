@@ -12,7 +12,7 @@ const ProjectDetail = () => {
       try {
         const token = localStorage.getItem("accessToken");
         const TOKEN_CYBERSOFT =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."; // token thật từ Cybersoft
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA4NSIsIkhldEhhblN0cmluZyI6IjExLzAyLzIwMjYiLCJIZXRIYW5UaW1lIjoiMTc3MDc2ODAwMDAwMCIsIm5iZiI6MTc0MzAxMjAwMCwiZXhwIjoxNzcwOTE5MjAwfQ._5a1o_PuNL8CuHuGdsi1TABKYJwuMsnG5uSKAILfaY8"; 
 
         const res = await axios.get(
           `https://jiranew.cybersoft.edu.vn/api/Project/getProjectDetail?id=${projectId}`,
@@ -36,7 +36,7 @@ const ProjectDetail = () => {
 
   return (
     <div className="p-8">
-      {/* Breadcrumb */}
+      
       <div className="text-gray-500 mb-2 text-sm">
         Project / CyberLearn / Project management /{" "}
         <span className="text-gray-700 font-medium">
@@ -99,7 +99,7 @@ const ProjectDetail = () => {
             {taskGroup.lstTaskDeTail.map((task) => (
               <div
                 key={task.taskId}
-                onClick={() => navigate(`/taskedit/${task.taskId}`)} // 👈 điều hướng khi click
+                onClick={() => navigate(`/taskedit/${task.taskId}`)} //  điều hướng khi click
                 className="bg-white p-2 mb-3 rounded border hover:shadow-md transition cursor-pointer"
               >
                 <p className="font-medium">{task.taskName}</p>

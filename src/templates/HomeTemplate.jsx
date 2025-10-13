@@ -69,7 +69,7 @@ const HomeTemplate = () => {
               </Link>
             </li>
 
-            {/* ✅ Thêm User Management */}
+            {/* Thêm User Management */}
             <li>
               <Link
                 to="/usermanagement"

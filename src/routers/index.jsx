@@ -27,7 +27,7 @@ const routers = [
   // Private routes
   {
     path: "/",
-    element: <PrivateRoute />, // bọc private
+    element: <PrivateRoute />, 
     child: [
       {
         path: "/",

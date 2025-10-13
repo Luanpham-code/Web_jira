@@ -54,7 +54,7 @@ const TaskEdit = () => {
     fetchComments();
   }, [taskId]);
 
-  // ===== COMMENT HANDLERS =====
+  
   const refreshComments = async () => {
     const res = await axios.get(
       `https://jiranew.cybersoft.edu.vn/api/Comment/getAll?taskId=${taskId}`,
@@ -134,9 +134,9 @@ const TaskEdit = () => {
     );
 
   return (
-    // ======= OVERLAY =======
+   
     <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm flex items-center justify-center z-50">
-      {/* ======= POPUP CONTAINER ======= */}
+      
       <div className="bg-white rounded-lg shadow-lg w-3/4 max-w-5xl flex overflow-hidden relative">
         {/* Nút đóng */}
         <button
@@ -146,7 +146,7 @@ const TaskEdit = () => {
           ✕
         </button>
 
-        {/* ===== LEFT COLUMN ===== */}
+        
         <div className="w-2/3 p-8 overflow-y-auto max-h-[85vh]">
           <div className="flex items-center gap-3 mb-5">
             <select className="border px-2 py-1 rounded text-sm">
@@ -272,7 +272,7 @@ const TaskEdit = () => {
           </div>
         </div>
 
-        {/* ===== RIGHT COLUMN ===== */}
+        
         <div className="w-1/3 border-l p-6 text-sm text-gray-700 overflow-y-auto max-h-[85vh]">
           <div className="mb-4">
             <label className="block font-semibold mb-1">STATUS</label>

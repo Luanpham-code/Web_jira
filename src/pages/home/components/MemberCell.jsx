@@ -17,7 +17,7 @@ const MemberCell = ({ members, record, onAddMember, onRemoveUser }) => {
   const [options, setOptions] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
-  // 🧠 Khi người dùng gõ → gọi API getUserByKeyword
+  //  Khi người dùng gõ → gọi API getUserByKeyword
   const handleSearch = async (value) => {
     setSearchValue(value);
     if (!value.trim()) {
@@ -38,12 +38,12 @@ const MemberCell = ({ members, record, onAddMember, onRemoveUser }) => {
       }));
       setOptions(users);
     } catch (error) {
-      console.error("❌ Lỗi tìm user:", error);
+      console.error(" Lỗi tìm user:", error);
       setOptions([]);
     }
   };
 
-  // 📦 Giao diện popover thêm thành viên
+  //  Giao diện popover thêm thành viên
   const addMemberContent = (
     <div className="p-2 w-56">
       <AutoComplete
@@ -73,7 +73,7 @@ const MemberCell = ({ members, record, onAddMember, onRemoveUser }) => {
     </div>
   );
 
-  // 📋 Popover danh sách member
+  //  Popover danh sách member
   const memberTable = (
     <div className="w-72">
       <Table

@@ -35,7 +35,7 @@ const CreateProject = () => {
         );
         setCategories(res.data.content);
       } catch (error) {
-        console.error("❌ Lỗi khi tải danh mục:", error);
+        console.error(" Lỗi khi tải danh mục:", error);
         alert("Không thể tải danh mục dự án!");
       }
     };
@@ -43,18 +43,18 @@ const CreateProject = () => {
     fetchCategories();
   }, []);
 
-  // 🔹 Cập nhật giá trị input
+  // Cập nhật giá trị input
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
 
-  // 🔹 Cập nhật nội dung Editor
-  const handleEditorChange = (content) => {
-    setForm({ ...form, description: content });
-  };
+  //  Cập nhật nội dung Editor
+  // const handleEditorChange = (content) => {
+  //   setForm({ ...form, description: content });
+  // };
 
-  // 🔹 Submit form
+  // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -63,7 +63,7 @@ const CreateProject = () => {
       const TOKEN_CYBERSOFT =
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA4NSIsIkhldEhhblN0cmluZyI6IjExLzAyLzIwMjYiLCJIZXRIYW5UaW1lIjoiMTc3MDc2ODAwMDAwMCIsIm5iZiI6MTc0MzAxMjAwMCwiZXhwIjoxNzcwOTE5MjAwfQ._5a1o_PuNL8CuHuGdsi1TABKYJwuMsnG5uSKAILfaY8";
 
-      // 1️⃣ Kiểm tra trùng tên
+      // Kiểm tra trùng tên
       const allProjects = await axios.get(
         "https://jiranew.cybersoft.edu.vn/api/Project/getAllProject",
         {
@@ -81,12 +81,12 @@ const CreateProject = () => {
       );
 
       if (exists) {
-        alert("⚠️ Tên dự án đã tồn tại!");
+        alert(" Tên dự án đã tồn tại!");
         setLoading(false);
         return;
       }
 
-      // 2️⃣ Gửi yêu cầu tạo mới
+      // Gửi yêu cầu tạo mới
       const response = await axios.post(
         "https://jiranew.cybersoft.edu.vn/api/Project/createProjectAuthorize",
         {
@@ -102,12 +102,12 @@ const CreateProject = () => {
         }
       );
 
-      console.log("✅ Response:", response.data);
-      alert("🎉 Tạo dự án thành công!");
+      console.log(" Response:", response.data);
+      alert(" Tạo dự án thành công!");
       window.location.href = "/projectmanagement";
     } catch (error) {
-      console.error("❌ Lỗi khi tạo dự án:", error);
-      alert("❌ Tạo dự án thất bại! Kiểm tra token hoặc dữ liệu gửi lên.");
+      console.error(" Lỗi khi tạo dự án:", error);
+      alert(" Tạo dự án thất bại! Kiểm tra token hoặc dữ liệu gửi lên.");
     } finally {
       setLoading(false);
     }
@@ -118,7 +118,7 @@ const CreateProject = () => {
       <h2 className="text-2xl font-bold mb-4">Create Project</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4 max-w-3xl">
-        {/* 🔹 Nhập tên dự án */}
+        {/*  Nhập tên dự án */}
         <div>
           <label className="block mb-1 font-semibold">Name</label>
           <input
@@ -131,11 +131,11 @@ const CreateProject = () => {
           />
         </div>
 
-        {/* 🔹 Trình soạn thảo mô tả (TinyMCE) */}
+        /*  Trình soạn thảo mô tả (TinyMCE) */
         <div>
           <label className="block mb-1 font-semibold">Description</label>
           <Editor
-           apiKey="zkgjkolyr6e2afh7agqajzk8o625esd8xyixcj4k11enkjaa" // 🔹 Để trống (hoặc bỏ luôn dòng này)
+           apiKey="zkgjkolyr6e2afh7agqajzk8o625esd8xyixcj4k11enkjaa" 
            init={{
            height: 400,
            menubar: true,
@@ -156,7 +156,7 @@ const CreateProject = () => {
         />
         </div>
 
-        {/* 🔹 Danh mục */}
+        {/*  Danh mục */}
         <div>
           <label className="block mb-1 font-semibold">Category</label>
           <select
@@ -175,7 +175,7 @@ const CreateProject = () => {
           </select>
         </div>
 
-        {/* 🔹 Nút Submit */}
+        {/*  Nút Submit */}
         <button
           type="submit"
           disabled={loading}

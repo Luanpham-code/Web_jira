@@ -13,13 +13,13 @@ const LoginPage = () => {
     setLoading(true);
     const res = await authService.login(values);
 
-    // Lưu token
+    
     localStorage.setItem("accessToken", res.data.content.accessToken);
 
     message.success("Đăng nhập thành công!");
-    navigate("/projectmanagement");  // ✅ phải là /home, không phải /HomePage
+    navigate("/projectmanagement");  
   } catch (err) {
-    console.log("❌ Lỗi login:", err.response?.data);
+    console.log(" Lỗi login:", err.response?.data);
     message.error(err.response?.data?.message || "Đăng nhập thất bại!");
   } finally {
     setLoading(false);
@@ -57,7 +57,7 @@ const LoginPage = () => {
                 Login
               </Button>
 
-              {/* ✅ Nút đăng ký */}
+              {/* Nút đăng ký */}
               <Button type="default" block onClick={() => navigate("/register")}>
                 Chưa có tài khoản? Đăng ký
               </Button>

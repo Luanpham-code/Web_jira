@@ -16,7 +16,7 @@ import { Outlet } from "react-router-dom";
 const AuthTemplate = () => {
   return (
     <div>
-      <Outlet />  {/* render login, register */}
+      <Outlet />  
     </div>
   );
 };

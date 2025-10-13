@@ -10,7 +10,7 @@ import {
   message,
 } from "antd";
 import EditProjectModal from "./EditProjectModal";
-import MemberCell from "./MemberCell"; // ✅ import component mới
+import MemberCell from "./MemberCell"; 
 import { useNavigate } from "react-router-dom";
 
 const ListProjec = () => {
@@ -28,7 +28,7 @@ const ListProjec = () => {
     pageSizeOptions: ["5", "10", "20", "50", "100"],
   });
 
-  // ✅ Mở modal chỉnh sửa
+  //  Mở modal chỉnh sửa
   const openEditModal = (id) => {
     setEditingProjectId(id);
     setIsEditModalOpen(true);
@@ -38,7 +38,7 @@ const ListProjec = () => {
     setIsEditModalOpen(false);
   };
 
-  // ✅ Gọi API load danh sách project
+  //  Gọi API load danh sách project
   const fetchListProjec = async () => {
     try {
       const response = await projectService.getListProject();
@@ -52,41 +52,41 @@ const ListProjec = () => {
     }
   };
 
-  // ✅ Xóa project
+  // Xóa project
   const handleDelete = async (id) => {
     try {
       await projectService.deleteProject(id);
-      message.success("✅ Xóa thành công!");
+      message.success(" Xóa thành công!");
       fetchListProjec();
     } catch (error) {
-      console.error("❌ Lỗi khi xóa:", error);
+      console.error(" Lỗi khi xóa:", error);
       message.error("Xóa thất bại, thử lại sau!");
     }
   };
 
-  // ✅ Xóa user khỏi project
+  // Xóa user khỏi project
   const handleRemoveUser = async (projectId, userId) => {
     try {
       await projectService.removeUserFromProject(projectId, userId);
-      message.success("✅ Đã xóa thành viên khỏi project!");
+      message.success(" Đã xóa thành viên khỏi project!");
       fetchListProjec();
     } catch (error) {
-      console.error("❌ Lỗi khi xóa thành viên:", error);
+      console.error(" Lỗi khi xóa thành viên:", error);
       message.error("Lỗi khi xóa thành viên!");
     }
   };
 
-  // ✅ Thêm user vào project (gọi API)
+  // Thêm user vào project 
   const handleAddMember = async (projectId, username) => {
     try {
       await projectService.addUserToProject({
         projectId,
         userName: username,
       });
-      message.success("✅ Đã thêm thành viên!");
+      message.success(" Đã thêm thành viên!");
       fetchListProjec();
     } catch (error) {
-      console.error("❌ Lỗi khi thêm:", error);
+      console.error(" Lỗi khi thêm:", error);
       message.error("Không thể thêm thành viên!");
     }
   };
@@ -109,7 +109,7 @@ const ListProjec = () => {
   const setAgeSort = () =>
     setSortedInfo({ order: "descend", columnKey: "age" });
 
-  // ✅ Cấu hình các cột của bảng
+  // Cấu hình các cột của bảng
   const navigate = useNavigate();
   const columns = [
     {

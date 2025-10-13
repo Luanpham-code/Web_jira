@@ -15,7 +15,7 @@ export const projectService = {
   
   addUserToProject: (data) => axiosCustom.post(`/Project/assignUserProject`, data),
 
-   // Xóa thành viên ✅ (đúng theo Swagger bạn gửi)
+   
   removeUserFromProject: (projectId, userId) =>
     axiosCustom.delete(`/Project/removeUserFromProject`, {
       data: { projectId, userId },

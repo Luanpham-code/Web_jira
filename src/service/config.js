@@ -9,10 +9,10 @@ export const axiosCustom = axios.create({
     "Content-Type": "application/json",
     TokenCybersoft: TOKEN_CYBERSOFT,
   },
-  withCredentials: false, // ⚠️ NGĂN lỗi CORS trên trình duyệt
+  withCredentials: false, 
 });
 
-// ✅ Interceptor thêm Authorization: Bearer <accessToken>
+
 axiosCustom.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("accessToken");

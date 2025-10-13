@@ -19,13 +19,13 @@ const UserManagement = () => {
   const [editing, setEditing] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
-  // ✅ Phân trang
+  //  Phân trang
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
   const token = localStorage.getItem("accessToken");
 
-  // ✅ Lấy danh sách user
+  //  Lấy danh sách user
   const fetchUsers = async () => {
     try {
       if (!token) {
@@ -48,7 +48,7 @@ const UserManagement = () => {
     fetchUsers();
   }, []);
 
-  // ✅ Thêm / Cập nhật user
+  //  Thêm / Cập nhật user
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -81,7 +81,7 @@ const UserManagement = () => {
     }
   };
 
-  // ✅ Xóa user
+  // Xóa user
   const handleDelete = async (id) => {
     if (!window.confirm("Bạn có chắc muốn xóa user này?")) return;
     try {
@@ -98,7 +98,7 @@ const UserManagement = () => {
     }
   };
 
-  // ✅ Lọc & phân trang
+  // Lọc & phân trang
   const filteredUsers = users.filter(
     (u) =>
       u.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -171,7 +171,7 @@ const UserManagement = () => {
                     onClick={() => {
                       setEditing(u);
                       setForm({
-                        id: u.userId, // ✅ SỬA CHỖ NÀY
+                        id: u.userId, 
                         email: u.email,
                         name: u.name,
                         phoneNumber: u.phoneNumber,
