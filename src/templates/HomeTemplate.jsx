@@ -66,7 +66,19 @@ const HomeTemplate = () => {
                 Create project
               </Link>
             </li>
+<<<<<<< HEAD
 
+=======
+            <li>
+              <Link
+                to="/usermanagement"
+                className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100"
+              >
+                <AppstoreOutlined />
+                User management
+              </Link>
+            </li>
+>>>>>>> feature/task-edit
             <hr className="my-2" />
 
             <li>

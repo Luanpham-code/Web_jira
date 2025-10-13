@@ -10,6 +10,8 @@ import PrivateRoute from "./PrivateRoute";
 import CreateTaskPage from "../pages/createTask";
 import CreateProject from "../pages/CreateProject";
 import ProjectDetail from "../pages/ProjectDetail";
+import TaskEdit from "../pages/taskEdit";
+import UserManagement from "../pages/userManagement";
 
 const routers = [
   // Public routes
@@ -37,6 +39,11 @@ const routers = [
           { path: "createtask", element: <CreateTaskPage /> }, // ✅ /createtask
           { path: "createproject", element: <CreateProject /> }, // ✅ /createtask
           { path:"/projectdetail/:projectId", element:<ProjectDetail />},
+
+
+          { path:"/taskedit/:taskId", element:<TaskEdit />},
+          { path:"/usermanagement", element:<UserManagement />},
+
         ],
       },
     ],

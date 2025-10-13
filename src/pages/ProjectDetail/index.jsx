@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+<<<<<<< HEAD
 import { useParams } from "react-router-dom";
 import axios from "axios";
  
@@ -6,13 +7,28 @@ const ProjectDetail = () => {
   const { projectId } = useParams();
   const [projectDetail, setProjectDetail] = useState(null);
  
+=======
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+const ProjectDetail = () => {
+  const { projectId } = useParams();
+  const navigate = useNavigate();
+  const [projectDetail, setProjectDetail] = useState(null);
+
+>>>>>>> feature/task-edit
   useEffect(() => {
     const fetchProjectDetail = async () => {
       try {
         const token = localStorage.getItem("accessToken");
         const TOKEN_CYBERSOFT =
+<<<<<<< HEAD
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."; // token thật từ Cybersoft
  
+=======
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
+
+>>>>>>> feature/task-edit
         const res = await axios.get(
           `https://jiranew.cybersoft.edu.vn/api/Project/getProjectDetail?id=${projectId}`,
           {
@@ -22,18 +38,30 @@ const ProjectDetail = () => {
             },
           }
         );
+<<<<<<< HEAD
  
+=======
+>>>>>>> feature/task-edit
         setProjectDetail(res.data.content);
       } catch (error) {
         console.error("Lỗi khi tải chi tiết project:", error);
       }
     };
+<<<<<<< HEAD
  
     fetchProjectDetail();
   }, [projectId]);
  
   if (!projectDetail) return <p>Đang tải chi tiết dự án...</p>;
  
+=======
+
+    fetchProjectDetail();
+  }, [projectId]);
+
+  if (!projectDetail) return <p>Đang tải chi tiết dự án...</p>;
+
+>>>>>>> feature/task-edit
   return (
     <div className="p-8">
       {/* Breadcrumb */}
@@ -43,6 +71,7 @@ const ProjectDetail = () => {
           {projectDetail.projectName}
         </span>
       </div>
+<<<<<<< HEAD
  
       {/* Title */}
       <h1 className="text-2xl font-bold mb-2">{projectDetail.projectName}</h1>
@@ -53,6 +82,16 @@ const ProjectDetail = () => {
         {/* Search + Avatars */}
         <div className="flex items-center gap-3">
           {/* Search Box */}
+=======
+
+      {/* Title */}
+      <h1 className="text-2xl font-bold mb-2">{projectDetail.projectName}</h1>
+      <p className="text-gray-600 mb-6">{projectDetail.description}</p>
+
+      {/* Top bar */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+>>>>>>> feature/task-edit
           <div className="relative">
             <input
               type="text"
@@ -61,8 +100,12 @@ const ProjectDetail = () => {
             />
             <i className="fa fa-search absolute left-2 top-2 text-gray-400 text-sm"></i>
           </div>
+<<<<<<< HEAD
  
           {/* Members (avatars initials) */}
+=======
+
+>>>>>>> feature/task-edit
           <div className="flex items-center -space-x-2">
             {projectDetail.members?.slice(0, 3).map((user) => (
               <div
@@ -78,6 +121,7 @@ const ProjectDetail = () => {
               </div>
             ))}
           </div>
+<<<<<<< HEAD
  
           {/* Add member button (optional) */}
           <button className="ml-2 text-gray-500 hover:text-gray-700">
@@ -97,6 +141,19 @@ const ProjectDetail = () => {
       </div>
  
       {/* ======= Task Columns ======= */}
+=======
+
+          <button className="ml-2 text-gray-500 hover:text-gray-700">+ Add</button>
+        </div>
+
+        <div className="flex items-center gap-6 text-sm text-gray-600">
+          <span className="cursor-pointer hover:text-black">Only My Issues</span>
+          <span className="cursor-pointer hover:text-black">Recently Updated</span>
+        </div>
+      </div>
+
+      {/* Task columns */}
+>>>>>>> feature/task-edit
       <div className="grid grid-cols-4 gap-4">
         {projectDetail.lstTask?.map((taskGroup, index) => (
           <div
@@ -106,11 +163,19 @@ const ProjectDetail = () => {
             <h2 className="font-semibold mb-3 text-gray-700 uppercase text-sm">
               {taskGroup.statusName}
             </h2>
+<<<<<<< HEAD
  
             {/* Tasks in each column */}
             {taskGroup.lstTaskDeTail.map((task) => (
               <div
                 key={task.taskId}
+=======
+
+            {taskGroup.lstTaskDeTail.map((task) => (
+              <div
+                key={task.taskId}
+                onClick={() => navigate(`/taskedit/${task.taskId}`)} // 👈 thêm điều hướng
+>>>>>>> feature/task-edit
                 className="bg-white p-2 mb-3 rounded border hover:shadow-md transition cursor-pointer"
               >
                 <p className="font-medium">{task.taskName}</p>
@@ -138,6 +203,11 @@ const ProjectDetail = () => {
     </div>
   );
 };
+<<<<<<< HEAD
  
 export default ProjectDetail;
  
+=======
+
+export default ProjectDetail;
+>>>>>>> feature/task-edit
