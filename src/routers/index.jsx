@@ -1,4 +1,3 @@
-
 import { Route } from "react-router-dom";
 import HomePage from "../pages/home";
 import HomeTemplate from "../templates/HomeTemplate";
@@ -19,7 +18,7 @@ const routers = [
     path: "/",
     element: <AuthTemplate />,
     child: [
-      { path: "/", element: <LoginPage /> },      // ✅ mặc định login
+      { path: "/", element: <LoginPage /> }, // mặc định login
       { path: "/login", element: <LoginPage /> },
       { path: "/register", element: <RegisterPage /> },
     ],
@@ -28,22 +27,19 @@ const routers = [
   // Private routes
   {
     path: "/",
-    element: <PrivateRoute />,   // bọc private
+    element: <PrivateRoute />, // bọc private
     child: [
       {
         path: "/",
         element: <HomeTemplate />,
         child: [
-          { path: "projectmanagement", element: <HomePage /> },       // ✅ /home
-          { path: "detail", element: <WebDetailPage /> }, // ✅ /detail
-          { path: "createtask", element: <CreateTaskPage /> }, // ✅ /createtask
-          { path: "createproject", element: <CreateProject /> }, // ✅ /createtask
-          { path:"/projectdetail/:projectId", element:<ProjectDetail />},
-
-
-          { path:"/taskedit/:taskId", element:<TaskEdit />},
-          { path:"/usermanagement", element:<UserManagement />},
-
+          { path: "projectmanagement", element: <HomePage /> },
+          { path: "detail", element: <WebDetailPage /> },
+          { path: "createtask", element: <CreateTaskPage /> },
+          { path: "createproject", element: <CreateProject /> },
+          { path: "projectdetail/:projectId", element: <ProjectDetail /> },
+          { path: "taskedit/:taskId", element: <TaskEdit /> },
+          { path: "usermanagement", element: <UserManagement /> },
         ],
       },
     ],
@@ -65,4 +61,3 @@ export const renderRoutes = () => {
     </Route>
   ));
 };
-

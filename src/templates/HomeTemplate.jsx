@@ -48,6 +48,7 @@ const HomeTemplate = () => {
                 Cyber Board
               </Link>
             </li>
+
             <li>
               <Link
                 to="/projectmanagement"
@@ -57,6 +58,7 @@ const HomeTemplate = () => {
                 Project management
               </Link>
             </li>
+
             <li>
               <Link
                 to="/createproject"
@@ -66,9 +68,8 @@ const HomeTemplate = () => {
                 Create project
               </Link>
             </li>
-<<<<<<< HEAD
 
-=======
+            {/* ✅ Thêm User Management */}
             <li>
               <Link
                 to="/usermanagement"
@@ -78,7 +79,7 @@ const HomeTemplate = () => {
                 User management
               </Link>
             </li>
->>>>>>> feature/task-edit
+
             <hr className="my-2" />
 
             <li>
