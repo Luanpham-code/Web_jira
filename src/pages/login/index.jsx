@@ -14,7 +14,7 @@ const LoginPage = () => {
     const res = await authService.login(values);
 
     
-    localStorage.setItem("accessToken", res.data.content.accessToken);
+    localStorage.setItem("ACCESS_TOKEN", res.data.content.accessToken);
 
     message.success("Đăng nhập thành công!");
     navigate("/projectmanagement");  
