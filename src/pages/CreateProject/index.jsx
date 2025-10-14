@@ -131,7 +131,7 @@ const CreateProject = () => {
           />
         </div>
 
-        /*  Trình soạn thảo mô tả (TinyMCE) */
+        {/* /*  Trình soạn thảo mô tả (TinyMCE) */ }
         <div>
           <label className="block mb-1 font-semibold">Description</label>
           <Editor
