@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Editor } from "@tinymce/tinymce-react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 
 
@@ -132,7 +134,7 @@ const CreateProject = () => {
         </div>
 
         {/* /*  Trình soạn thảo mô tả (TinyMCE) */ }
-        <div>
+        {/* <div>
           <label className="block mb-1 font-semibold">Description</label>
           <Editor
            apiKey="zkgjkolyr6e2afh7agqajzk8o625esd8xyixcj4k11enkjaa" 
@@ -154,6 +156,17 @@ const CreateProject = () => {
           value={form.description}
           onEditorChange={(content) => setForm({ ...form, description: content })}
         />
+        </div> */}
+
+        <div>
+            <label className="block mb-1 font-semibold">Description</label>
+              <ReactQuill
+               theme="snow"
+               value={form.description}
+               onChange={(content) => setForm({ ...form, description: content })}
+               placeholder="Enter task description..."
+               style={{ height: 200 }}
+               />
         </div>
 
         {/*  Danh mục */}
