@@ -15,11 +15,16 @@ export const projectService = {
   
   addUserToProject: (data) => axiosCustom.post(`/Project/assignUserProject`, data),
 
-   
   removeUserFromProject: (projectId, userId) =>
-    axiosCustom.delete(`/Project/removeUserFromProject`, {
-      data: { projectId, userId },
-    }),
+  axiosCustom.post(`/Project/removeUserFromProject`, {
+    projectId,
+    userId,
+  }), 
+
+  // removeUserFromProject: (projectId, userId) =>
+  //   axiosCustom.delete(`/Project/removeUserFromProject`, {
+  //     data: { projectId, userId },
+  //   }),
 
   getUserByKeyword: (keyword) =>
   axiosCustom.get(`/Users/getUser?keyword=${keyword}`),
