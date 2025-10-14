@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Modal, Form, Input, Select, Row, Col, message } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
 import { projectService } from "../../../service/projectService";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const { Option } = Select;
 
@@ -103,7 +105,7 @@ const EditProjectModal = ({ visible, onCancel, projectId, onSuccess }) => {
           </Col>
         </Row>
 
-        <Form.Item label="Mô tả chi tiết">
+        {/* <Form.Item label="Mô tả chi tiết">
           <Editor
             apiKey="v561vo0qd1fz3juphckx6kd8ba7njqvi8rcv4n8klx87h4kn"
             value={description}
@@ -122,6 +124,13 @@ const EditProjectModal = ({ visible, onCancel, projectId, onSuccess }) => {
                 "bullist numlist outdent indent | removeformat | help",
             }}
           />
+        </Form.Item> */}
+        <Form.Item label="Mô tả chi tiết" name="description">
+                 <ReactQuill
+                   theme="snow"
+                   placeholder="Enter task description..."
+                   style={{ height: 200 }}
+                 />
         </Form.Item>
       </Form>
     </Modal>
