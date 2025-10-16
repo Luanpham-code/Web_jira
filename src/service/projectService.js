@@ -30,7 +30,7 @@ export const projectService = {
   axiosCustom.get(`/Users/getUser?keyword=${keyword}`),
 
    getAllStatus: () => axiosCustom.get("/Status/getAll"),
-  getAllPriority: () => axiosCustom.get("/Priority/getAll?id=0"),
+  getAllPriority: () => axiosCustom.get("/Priority/getAll"),
   getAllTaskType: () => axiosCustom.get("/TaskType/getAll"),
   getAllUsers: () => axiosCustom.get("/Users/getUser"),
   createTask: (data) => axiosCustom.post("/Project/createTask", data),

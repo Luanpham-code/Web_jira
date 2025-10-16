@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { projectService } from "../../service/projectService";
+import { message } from "antd";
 
 const ProjectDetail = () => {
   const { projectId } = useParams();
@@ -10,33 +11,26 @@ const ProjectDetail = () => {
   useEffect(() => {
     const fetchProjectDetail = async () => {
       try {
-        const token = localStorage.getItem("accessToken");
-        const TOKEN_CYBERSOFT =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA4NSIsIkhldEhhblN0cmluZyI6IjExLzAyLzIwMjYiLCJIZXRIYW5UaW1lIjoiMTc3MDc2ODAwMDAwMCIsIm5iZiI6MTc0MzAxMjAwMCwiZXhwIjoxNzcwOTE5MjAwfQ._5a1o_PuNL8CuHuGdsi1TABKYJwuMsnG5uSKAILfaY8"; 
-
-        const res = await axios.get(
-          `https://jiranew.cybersoft.edu.vn/api/Project/getProjectDetail?id=${projectId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              TokenCybersoft: TOKEN_CYBERSOFT,
-            },
-          }
-        );
+        const res = await projectService.getProjectDetail(projectId);
+        if (!res.data.content) {
+          message.error("Không tìm thấy dự án!");
+          navigate("/projectmanagement");
+          return;
+        }
         setProjectDetail(res.data.content);
       } catch (error) {
         console.error("Lỗi khi tải chi tiết project:", error);
+        message.error("Không thể tải chi tiết dự án!");
       }
     };
 
     fetchProjectDetail();
-  }, [projectId]);
+  }, [projectId, navigate]);
 
   if (!projectDetail) return <p>Đang tải chi tiết dự án...</p>;
 
   return (
     <div className="p-8">
-      
       <div className="text-gray-500 mb-2 text-sm">
         Project / CyberLearn / Project management /{" "}
         <span className="text-gray-700 font-medium">
@@ -44,11 +38,9 @@ const ProjectDetail = () => {
         </span>
       </div>
 
-      {/* Title */}
       <h1 className="text-2xl font-bold mb-2">{projectDetail.projectName}</h1>
       <p className="text-gray-600 mb-6">{projectDetail.description}</p>
 
-      {/* Top bar */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="relative">
@@ -85,7 +77,6 @@ const ProjectDetail = () => {
         </div>
       </div>
 
-      {/* Task columns */}
       <div className="grid grid-cols-4 gap-4">
         {projectDetail.lstTask?.map((taskGroup, index) => (
           <div
@@ -96,10 +87,10 @@ const ProjectDetail = () => {
               {taskGroup.statusName}
             </h2>
 
-            {taskGroup.lstTaskDeTail.map((task) => (
+            {taskGroup.lstTaskDeTail?.map((task) => (
               <div
                 key={task.taskId}
-                onClick={() => navigate(`/taskedit/${task.taskId}`)} //  điều hướng khi click
+                onClick={() => navigate(`/taskedit/${task.taskId}`)}
                 className="bg-white p-2 mb-3 rounded border hover:shadow-md transition cursor-pointer"
               >
                 <p className="font-medium">{task.taskName}</p>
